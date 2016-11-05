@@ -1,6 +1,6 @@
 #include "lisp_test.h"
 
-TEST_F(LispTest, DISABLED_ListsAreNotSelfEvaliating) {
+TEST_F(LispTest, ListsAreNotSelfEvaliating) {
     ExpectRuntimeError("()");
     ExpectRuntimeError("(1)");
     ExpectRuntimeError("(1 2 3)");
@@ -9,7 +9,7 @@ TEST_F(LispTest, DISABLED_ListsAreNotSelfEvaliating) {
     ExpectEq("'(1)", "(1)");
     ExpectEq("'(1 2)", "(1 2)");
 }
-
+fff
 TEST_F(LispTest, DISABLED_ListSyntax) {
     ExpectEq("'(1 . 2)", "(1 . 2)");
     ExpectSyntaxError("(1 . 2 3)");

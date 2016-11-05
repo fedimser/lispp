@@ -1,18 +1,18 @@
 #include "lisp_test.h"
 
-TEST_F(LispTest, DISABLED_IntegersAreSelfEvaluating) {
+TEST_F(LispTest, IntegersAreSelfEvaluating) {
     ExpectEq("4", "4");
     ExpectEq("-14", "-14");
     ExpectEq("+14", "14");
 }
 
-TEST_F(LispTest, DISABLED_IntegerPredicate) {
+TEST_F(LispTest, IntegerPredicate) {
     ExpectEq("(number? -1)", "#t");
     ExpectEq("(number? 1)", "#t");
     ExpectEq("(number? #t)", "#f");
 }
 
-TEST_F(LispTest, DISABLED_IntegerComparison) {
+TEST_F(LispTest, IntegerComparison) {
     // =, <, >, <=, >=
     // These procedures return #t if their arguments are (respectively): equal,
     // monotonically increasing, monotonically decreasing, monotonically nondecreasing,
@@ -50,7 +50,7 @@ TEST_F(LispTest, DISABLED_IntegerComparison) {
     ExpectEq("(<= 3 3 2)", "#f");
 }
 
-TEST_F(LispTest, DISABLED_IntegerComparisonEdgeCases) {
+TEST_F(LispTest, IntegerComparisonEdgeCases) {
     ExpectRuntimeError("(= 1 #t)");
     ExpectRuntimeError("(< 1 #t)");
     ExpectRuntimeError("(> 1 #t)");
@@ -69,7 +69,7 @@ TEST_F(LispTest, DISABLED_IntegerArithmetics) {
     ExpectEq("(/ 4 2 2)", "1");
 }
 
-TEST_F(LispTest, DISABLED_IntegerArithmeticsEdgeCases) {
+TEST_F(LispTest, IntegerArithmeticsEdgeCases) {
     ExpectRuntimeError("(+ 1 #t)");
     ExpectRuntimeError("(- 1 #t)");
     ExpectRuntimeError("(* 1 #t)");
@@ -81,7 +81,7 @@ TEST_F(LispTest, DISABLED_IntegerArithmeticsEdgeCases) {
     ExpectRuntimeError("(-)");
 }
 
-TEST_F(LispTest, DISABLED_IntegerMaxMin) {
+TEST_F(LispTest, IntegerMaxMin) {
     ExpectEq("(max 0)", "0");
     ExpectEq("(min 0)", "0");
 
@@ -92,7 +92,7 @@ TEST_F(LispTest, DISABLED_IntegerMaxMin) {
     ExpectEq("(min 1 2 3 4 5)", "1");
 }
 
-TEST_F(LispTest, DISABLED_IntegerMaxMinEdgeCases) {
+TEST_F(LispTest, IntegerMaxMinEdgeCases) {
     ExpectRuntimeError("(max)");
     ExpectRuntimeError("(min)");
 
@@ -100,12 +100,12 @@ TEST_F(LispTest, DISABLED_IntegerMaxMinEdgeCases) {
     ExpectRuntimeError("(min #t)");
 }
 
-TEST_F(LispTest, DISABLED_IntegerAbs) {
+TEST_F(LispTest, IntegerAbs) {
     ExpectEq("(abs 10)", "10");
     ExpectEq("(abs -10)", "10");
 }
 
-TEST_F(LispTest, DISABLED_IntegerAbsEdgeCases) {
+TEST_F(LispTest, IntegerAbsEdgeCases) {
     ExpectRuntimeError("(abs)");
     ExpectRuntimeError("(abs #t)");
     ExpectRuntimeError("(abs 1 2)");

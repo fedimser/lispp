@@ -28,6 +28,7 @@ add_executable(run_tests
     test/test_symbol.cpp
     test/test_list.cpp
     test/test_control_flow.cpp
+    test/test_lambda.cpp
 )
 
 target_link_libraries(run_tests gtest pthread lispp)

@@ -1,8 +1,11 @@
-#include <iostream>
+#include "lispp/SchemeInterpreter.h"
 
-#include <lispp/example.h>
-
-int main() {
-    std::cout << GetHello("World") << std::endl;
+int main() { 
+	
+	SchemeInterpreter inter;
+	inter.usePrompt = true;
+	inter.debugInfo = false;
+	inter.Run();
+	
     return 0;
 }
