@@ -7,7 +7,8 @@ Integer::Integer (int64_t _value) {
 Integer::~Integer(){}
 	
 std::shared_ptr<Form> Integer::evaluate(VariableMap& vars) {
-	return std::make_shared<Integer>(value);
+	vars.doNothing(); 
+	return std::static_pointer_cast<Form>(shared_from_this());
 }
 	
 FormType Integer::getType(){

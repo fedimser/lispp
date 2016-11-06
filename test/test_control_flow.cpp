@@ -1,6 +1,6 @@
 #include "lisp_test.h"
 
-TEST_F(LispTest, DISABLED_IfReturnValuddde) {
+TEST_F(LispTest, IfReturnValue) {
     ExpectEq("(if #t 0)", "0");
     ExpectEq("(if #f 0)", "()");
     ExpectEq("(if (= 2 2) (+ 1 10))", "11");

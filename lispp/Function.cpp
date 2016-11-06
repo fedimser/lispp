@@ -1,37 +1,68 @@
 #include "Function.h"
 
- 
-Function::Function(std::vector<std::string>& _argNames, std::shared_ptr<Expression> _body) {
+Function::Function(std::vector<std::string>& _argNames,
+				   std::shared_ptr<Form> _body) {
 	for (size_t i = 0; i < _argNames.size(); ++i)  {
 		for (size_t j = i + 1; j < _argNames.size(); ++j)  {
-			if (argNames[i] == _argNames[j]) throw std::string("syntax error");
+			if (_argNames[i] == _argNames[j]) throw std::string("syntax error");
 		}
 	} 		
 
-	//argNames = std::move(_argNames);
+	argNames = _argNames;
 	body = _body;
 }
 	  
- 
-	
-// First element of arguments is ignored
-std::shared_ptr<Form> Function::apply(const std::vector<std::shared_ptr<Form> >& arguments, VariableMap& vars) {
-	int argCount = (int)arguments.size() - 1;
-	if (argCount != (int)argNames.size()) throw std::string("runtime error");
-	for (int i = 0; i < argCount; ++i) {
-		vars.pushValue(argNames[i], arguments[i+1]);
-	}
-	
-	std::shared_ptr<Form> ret = body->evaluate(vars);
-	
-	for (int i = 0; i < argCount; ++i) {
-		vars.popValue(argNames[i]);
-	}
-		
-	return ret;
-}    
-
+  
 std::shared_ptr<Form> Function::evaluate(VariableMap& vars) {
 	vars.doNothing();
-	return std::shared_ptr<Form>(this);
+	
+	//self-evaluating
+	return std::static_pointer_cast<Form>(shared_from_this());
+}
+
+std::shared_ptr<Form> Function::apply(std::vector<std::shared_ptr<Form> >& argValues, VariableMap& vars) {
+	
+	if (argValues.size() != argNames.size()) throw std::string("runtime error");
+	int argCount = argNames.size();
+	
+	for (int i = 0; i < argCount; ++i) {
+		vars.pushValue(argNames[i], argValues[i]);
+	}
+	
+	for (auto var : context) {
+		vars.pushValue(var.first, var.second);
+	} 
+	 
+	std::shared_ptr<Form> ret = body->evaluate(vars); 
+	
+	for (auto var : context) { 
+		context[var.first] = vars.getValue(var.first);
+		vars.popValue(var.first);
+	} 
+	
+	for (int i = 0; i < argCount; ++i) {
+		argValues[i] = vars.getValue(argNames[i]);
+		vars.popValue(argNames[i]);
+	}
+	return ret;
+}
+std::string Function::quote() {
+	std::stringstream ret;
+	int argCount = argNames.size();
+	ret << "#<CLOSURE <anon> (";
+	for(int i = 0; i < argCount; ++i) {
+		ret << argNames[i];
+		if (i < (int) argValues.size()) ret << "=" << argValues[i]->quote();
+		if (i != argCount-1) ret << " ";
+	}
+	ret << ")" << body->quote() << ">";
+	
+	/*
+	if (!context.empty()){
+		ret <<"\nCONTEXT:";
+		for(auto it: context)
+		ret << it.first <<"="<<it.second->quote()<<",";
+	}*/
+	
+	return ret.str();
 }

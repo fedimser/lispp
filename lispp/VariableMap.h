@@ -18,4 +18,5 @@ public:
 	void popValue(std::string);
 	std::shared_ptr<Form> getValue(std::string);
 	void doNothing();
+	bool isDefined(std::string);
 };

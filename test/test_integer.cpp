@@ -58,7 +58,7 @@ TEST_F(LispTest, IntegerComparisonEdgeCases) {
     ExpectRuntimeError("(>= 1 #t)");
 }
 
-TEST_F(LispTest, DISABLED_IntegerArithmetics) {
+TEST_F(LispTest, IntegerArithmetics) {
     ExpectEq("(+ 1 2)", "3");
     ExpectEq("(+ 1)", "1");
     ExpectEq("(+ 1 (+ 3 4 5))", "13");

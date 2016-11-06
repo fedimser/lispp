@@ -12,6 +12,7 @@
 #include "Boolean.h"
 #include "Expression.h"
 #include "List.h"
+#include "Pair.h"
 
  
 class SchemeInterpreter { 
@@ -27,9 +28,9 @@ private:
 	bool isIdentifier(std::string);
 	std::shared_ptr<Form> Formize(std::string);
 	bool isFunctionName(std::string);
+	void bracketCheck(const std::string&);
 	
-public:
-	bool debugInfo;
+public: 
 	bool usePrompt;
 	
 	SchemeInterpreter();  

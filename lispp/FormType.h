@@ -3,9 +3,9 @@
 enum FormType {
 	IntegerType, 
 	BooleanType, 
-	DefaultType,
 	FunctionType, 
 	SymbolType, 
 	ListType,
+	PairType,
 	ExpressionType
 }; 

@@ -9,8 +9,8 @@ TEST_F(LispTest, ListsAreNotSelfEvaliating) {
     ExpectEq("'(1)", "(1)");
     ExpectEq("'(1 2)", "(1 2)");
 }
-fff
-TEST_F(LispTest, DISABLED_ListSyntax) {
+
+TEST_F(LispTest, ListSyntax) {
     ExpectEq("'(1 . 2)", "(1 . 2)");
     ExpectSyntaxError("(1 . 2 3)");
 
@@ -19,7 +19,7 @@ TEST_F(LispTest, DISABLED_ListSyntax) {
     ExpectEq("'(1 . (2 . ()))", "(1 2)");
 }
 
-TEST_F(LispTest, DISABLED_ListInvalidSyntax) {
+TEST_F(LispTest, ListInvalidSyntax) {
     ExpectSyntaxError("((1)");
     ExpectSyntaxError("(1))");
     ExpectSyntaxError(")(1)");
@@ -29,32 +29,32 @@ TEST_F(LispTest, DISABLED_ListInvalidSyntax) {
     ExpectSyntaxError("(. 2)");
 }
 
-TEST_F(LispTest, DISABLED_PairPredicate) {
+TEST_F(LispTest, PairPredicate) {
     ExpectEq("(pair? '(1 . 2))", "#t");
     ExpectEq("(pair? '(1 2))", "#t");
     ExpectEq("(pair? '())", "#f");
 }
 
-TEST_F(LispTest, DISABLED_NullPredicate) {
+TEST_F(LispTest, NullPredicate) {
     ExpectEq("(null? '())", "#t");
     ExpectEq("(null? '(1 2))", "#f");
     ExpectEq("(null? '(1 . 2))", "#f");
 }
 
-TEST_F(LispTest, DISABLED_ListPredicate) {
+TEST_F(LispTest, ListPredicate) {
     ExpectEq("(list? '())", "#t");
     ExpectEq("(list? '(1 2))", "#t");
     ExpectEq("(list? '(1 . 2))", "#f");
     ExpectEq("(list? '(1 2 3 4 . 5))", "#f");
 }
 
-TEST_F(LispTest, DISABLED_PairOperations) {
+TEST_F(LispTest, PairOperations) {
     ExpectEq("(cons 1 2)", "(1 . 2)");
     ExpectEq("(car '(1 . 2))", "1");
     ExpectEq("(cdr '(1 . 2))", "2");
 }
 
-TEST_F(LispTest, DISABLED_PairMutations) {
+TEST_F(LispTest, PairMutations) {
     ExpectNoError("(define x '(1 . 2))");
 
     ExpectNoError("(set-car! x 5)");
@@ -64,7 +64,7 @@ TEST_F(LispTest, DISABLED_PairMutations) {
     ExpectEq("(cdr x)", "6");
 }
 
-TEST_F(LispTest, DISABLED_ListOperations) {
+TEST_F(LispTest, ListOperations) {
     ExpectEq("(list)", "()");
     ExpectEq("(list 1)", "(1)");
     ExpectEq("(list 1 2 3)", "(1 2 3)");

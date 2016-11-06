@@ -54,6 +54,7 @@ bool SchemeInterpreter::isSubsequent(char c) {
 }
 
 bool SchemeInterpreter::isIdentifier(std::string text) {
+	if (isFunctionName(text)) return false;
 	if (text.length() == 0) return false;
 	if (isInitial(text[0])) {
 		for (int i = 1; i < (int)text.length(); ++i) {
@@ -66,11 +67,20 @@ bool SchemeInterpreter::isIdentifier(std::string text) {
 	return false;
 }
 
+void SchemeInterpreter::bracketCheck(const std::string& text) {
+	int count = 0;
+	for(auto c : text) {
+		if (c == '(') ++count;
+		if (c == ')') --count;
+		if (count < 0) throw std::string("syntax error"); 
+	}
+	if (count != 0) throw std::string("syntax error"); 
+}
+
 std::shared_ptr<Form> SchemeInterpreter::Formize(std::string text) {
 	text = removeExtraSpaces(text);
 	
-	int len = text.length();
-	if(debugInfo) std::cerr<<"FormIZE ["<<text<<"]\n";
+	int len = text.length(); 
 	if(text[0]!='(' || text[len-1]!=')') {
 		int64_t val;
 		if (tryMakeInteger(text, val)) {
@@ -115,22 +125,11 @@ std::shared_ptr<Form> SchemeInterpreter::Formize(std::string text) {
 		
 		
 		if(isEndOfForm && cur.length()!=0) {
-			cur = removeExtraSpaces(cur);
-			//std::cerr<<"ne cur:" << cur<<"\n";
+			cur = removeExtraSpaces(cur); 
 			if (cur.length() != 0) subForms.push_back(cur); 
 			cur="";
 		}	
-	} 
-	
-	
-	if(debugInfo) {
-		std::cerr<<"DECOMPOSED:\n";
-		for(auto str: subForms)
-		{
-			std::cerr<< "["<<str<<"]";
-		}
-		std::cerr<<"\n";
-	}
+	}  
 	
 	if (subForms.size() != 0 && isFunctionName(subForms[0])) {
 		int argsCount = (int)subForms.size() - 1;
@@ -141,25 +140,37 @@ std::shared_ptr<Form> SchemeInterpreter::Formize(std::string text) {
 		return ret;
 	}
 	
-	if (debugInfo) std::cerr<<"AS LIST\n";
-	//interpret as a list
-	std::shared_ptr<List> ret = std::make_shared<List>();
-	for (auto str : subForms) {
-		ret->addElement(Formize(str));
+	//try interpret as dotted pair
+	if (subForms.size() >= 3 && subForms[subForms.size() - 2] == ".") {
+		std::shared_ptr<Form> left = Formize(subForms[subForms.size() - 3]);
+		std::shared_ptr<Form> right = Formize(subForms[subForms.size() - 1]);
+		
+		std::shared_ptr<Pair> ret = std::make_shared<Pair>(left, right);
+		
+		for (int i = subForms.size() - 4; i >= 0; --i) {
+			ret = std::make_shared<Pair>(Formize(subForms[i]), ret);
+		}
+		
+		return ret;
 	}
-	//std::cerr<<"LIST FILLED\n";
-	return ret;
-}
 	 
-// returns -1 if there isn't such function
-// returns -2 if it can be any number of arguments
-// otherwise returns number of arguments
+	//interpret as a list
+	std::vector<std::shared_ptr<Form> > elements;
+	for (auto str : subForms) {
+		elements.push_back(Formize(str));
+	} 
+	return std::make_shared<List>(elements);
+}
+	  
 bool SchemeInterpreter::isFunctionName(std::string word) {
 	if (word == "quote") return true;
 	
 	if (word == "number?") return true;
 	if (word == "boolean?") return true;
 	if (word == "symbol?") return true;
+	if (word == "list?") return true;
+	if (word == "pair?") return true;
+	if (word == "null?") return true;
 	
 	if (word == "+") return true;
 	if (word == "-") return true;
@@ -170,8 +181,7 @@ bool SchemeInterpreter::isFunctionName(std::string word) {
 	if (word == ">") return true;
 	if (word == "<") return true;
 	if (word == ">=") return true;		
-	if (word == "<=") return true;
-	
+	if (word == "<=") return true;	
 	
 	if (word == "max") return true;		
 	if (word == "min") return true;
@@ -185,15 +195,25 @@ bool SchemeInterpreter::isFunctionName(std::string word) {
 	if (word == "define") return true;		
 	if (word == "set!") return true;
 	if (word == "lambda") return true;	
+	if (word == "begin") return true;
 	
 	if (word == "if") return true;	
+	
+	if (word == "car") return true;	
+	if (word == "cdr") return true;
+	if (word == "set-car!") return true;	
+	if (word == "set-cdr!") return true;		
+	if (word == "cons") return true;	
+	if (word == "list") return true;	
+	if (word == "list-ref") return true;	
+	if (word == "list-tail") return true;	
+	
 	
 	return false;
 }
  
 
 SchemeInterpreter::SchemeInterpreter() {
-	debugInfo = false;
 	usePrompt = false;
 }; 	
 
@@ -208,14 +228,15 @@ void SchemeInterpreter::Run() {
 	while (fetchForm(form)) {
 		std::cout << processForm(form);
 		if (shouldClose) break;
-		if (usePrompt) std::cout <<"\n>";
-	}
-	//std::cerr<<"STOP\n";
+		std::cout << std::endl;
+		if (usePrompt) std::cout <<">";
+	} 
 } 
 
 
 std::string SchemeInterpreter::processForm(const std::string& inputText) {
-	try {
+	try { 
+		bracketCheck(inputText);
 		std::shared_ptr<Form> form = Formize(inputText); 
 		form = form->evaluate(vars);
 		std::string ret = form->quote();

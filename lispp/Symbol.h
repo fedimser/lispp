@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <set>
 
 #include "Form.h"
 #include "VariableMap.h"
@@ -13,7 +14,7 @@ public:
 	std::shared_ptr<Form> evaluate(VariableMap&);
 	FormType getType();
 	std::string quote();
-	bool asBoolean();
+	bool asBoolean(); 
 private:
 	std::string name;
 };

@@ -2,6 +2,8 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <vector>
+#include <set>
 
 #include "Form.h"
 #include "Function.h"
@@ -16,13 +18,13 @@ private:
 	std::vector<std::shared_ptr<Form> > arguments;
 	
 	
-	bool compare(std::shared_ptr<Form>, std::shared_ptr<Form>);
-	int64_t accumulateInitial();
+	bool compare(std::shared_ptr<Form>, std::shared_ptr<Form>); 
 	int64_t accumulate(std::shared_ptr<Form>, int64_t);
 	std::vector<std::shared_ptr<Form> > evaluateAllArguments(VariableMap&);
-
+	void getAllSymbols(std::shared_ptr<Form>, std::set<std::string>&);
 public:
-	Expression(std::string);	
+	Expression(std::string);
+	Expression(std::string, std::vector<std::shared_ptr<Form> >);	
 	Expression(){};
 	~Expression(){};
 
@@ -30,5 +32,6 @@ public:
 	FormType getType(){return FormType::ExpressionType;}
 	std::string quote();
 	void addArgument(std::shared_ptr<Form> arg) {arguments.push_back(arg);} 
-	bool asBoolean() {return true;}
+	bool asBoolean() {return true;} 
+	std::vector<std::shared_ptr<Form> > getArguments() {return arguments;}
 };

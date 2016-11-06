@@ -6,7 +6,7 @@
 #include "VariableMap.h"
 
 
-class Boolean: public Form {
+class Boolean: public Form, public std::enable_shared_from_this<Boolean> {
 private:
 	bool value;
 public: 

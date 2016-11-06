@@ -14,7 +14,18 @@ include_directories(.)
 include_directories(test/gmock)
 
 add_library(lispp
-    lispp/example.cpp)
+    lispp/Boolean.cpp
+    lispp/Expression.cpp
+    lispp/Form.cpp
+    lispp/FormType.cpp
+    lispp/Function.cpp
+    lispp/Integer.cpp
+    lispp/List.cpp
+    lispp/SchemeInterpreter.cpp
+    lispp/Symbol.cpp
+    lispp/VariableMap.cpp
+    lispp/Pair.cpp
+)
 
 add_executable(lisp_repl main.cpp)
 

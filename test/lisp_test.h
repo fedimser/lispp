@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include <gtest/gtest.h>
-#include "../SchemeInterpreter.cpp"
+#include "../lispp/SchemeInterpreter.h"
 
 struct LispTest : public ::testing::Test {
     SchemeInterpreter inter;
@@ -12,7 +12,7 @@ struct LispTest : public ::testing::Test {
     
     // initialize new interpreter here
     LispTest() {
-		inter = SchemeInterpreter(); 
+		inter = SchemeInterpreter();
 	}
 
     // evaluate expression and compare result to expected

@@ -1,21 +1,23 @@
 #include "lisp_test.h"
 
-TEST_F(LispTest, DISABLED_SimpleLambda) {
+TEST_F(LispTest, SimpleLambda) {
     ExpectEq("((lambda (x) (+ 1 x)) 5)", "6");
 }
 
-TEST_F(LispTest, DISABLED_LambdaBodyHasImplicitBegin) {
+TEST_F(LispTest, LambdaBodyHasImplicitBegin) {
     ExpectNoError("(define test (lambda (x) (set! x (* x 2)) (+ 1 x)))");
     ExpectEq("(test 20)", "41");
 }
 
-TEST_F(LispTest, DISABLED_SlowSum) {
+TEST_F(LispTest, SlowSum) {
     ExpectNoError("(define slow-add (lambda (x y) (if (= x 0) y (slow-add (- x 1) (+ y 1)))))");
     ExpectEq("(slow-add 3 3)", "6");
     ExpectEq("(slow-add 100 100)", "200");
 }
 
-TEST_F(LispTest, DISABLED_LambdaClosure) {
+
+
+TEST_F(LispTest, LambdaClosure) {
     ExpectNoError("(define x 1)");
 
     ExpectNoError(R"(
@@ -34,13 +36,13 @@ TEST_F(LispTest, DISABLED_LambdaClosure) {
     ExpectEq("x", "1");
 }
 
-TEST_F(LispTest, DISABLED_LambdaSyntax) {
+TEST_F(LispTest, LambdaSyntax) {
     ExpectSyntaxError("(lambda)");
     ExpectSyntaxError("(lambda x)");
     ExpectSyntaxError("(lambda (x))");
 }
 
-TEST_F(LispTest, DISABLED_DefineLambdaSugar) {
+TEST_F(LispTest, DefineLambdaSugar) {
     ExpectNoError("(define (inc x) (+ x 1))");
     ExpectEq("(inc -1)", "0");
 

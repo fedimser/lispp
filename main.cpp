@@ -3,8 +3,7 @@
 int main() { 
 	
 	SchemeInterpreter inter;
-	inter.usePrompt = true;
-	inter.debugInfo = false;
+	inter.usePrompt = false;
 	inter.Run();
 	
     return 0;

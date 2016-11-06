@@ -3,9 +3,10 @@
 #include <memory>
 
 #include "Form.h"
+#include "VariableMap.h"
 
 
-class Integer: public  Form {
+class Integer: public Form, public std::enable_shared_from_this<Integer> {
 public:
 	Integer (int64_t _value);
 	~Integer();
