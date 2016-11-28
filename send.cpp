@@ -253,7 +253,12 @@ bool SchemeInterpreter::fetchForm(std::string& ret) {
 	int depth = 0;
 	bool started=false;
 	while(true) {
-		if (std::cin.eof()) return false;
+		if (std::cin.eof()) {
+			if (started) {
+				std::cout << "syntax error\n";
+			}
+			return false;
+		}
 		std::cin.get(ch);
 		ret+=ch;
 		if (ch == '(') depth++;
